@@ -32,7 +32,6 @@ The focus of this project is on **clarity, correctness, and system understanding
 ## Project Structure
 
 task-manager/
-│
 ├── main.py # FastAPI application entry point
 ├── models/ # Pydantic models
 ├── repository/ # Database access layer
