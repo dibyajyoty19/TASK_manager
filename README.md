@@ -59,9 +59,12 @@ task-manager/
 - `GET /tasks/{task_id}` – Get task details  
 - `PUT /tasks/{task_id}` – Update a task  
 - `DELETE /tasks/{task_id}` – Delete a task  
-- `POST /tasks/{task_id}/complete` – Mark task as completed  
+- `POST /tasks/{task_id}/complete` – Mark a task as completed  
 
-### Task Model
+---
+
+## Task Model
+
 ```json
 {
   "id": "string",
@@ -73,65 +76,3 @@ task-manager/
   "external_reference_id": "string"
 }
 
-Design Notes
-Code Structure
-
-API routes contain no direct database logic
-
-All persistence operations are handled through a repository layer
-
-External integrations are isolated in service classes
-
-This keeps the codebase modular and easier to reason about
-
-Database
-
-MongoDB is used as a NoSQL datastore
-
-Accessed using a dedicated data access layer
-
-Schema is flexible and suitable for task-based data
-
-External SDK Integration
-
-GitHub is integrated using PyGithub
-
-A GitHub Issue can be created when a task is created
-
-The issue identifier is stored in external_reference_id
-
-If GitHub is unavailable, the API continues to function without failing
-
-Docker
-
-The application is fully containerized using Docker.
-
-Highlights
-
-Python 3.10 base image
-
-Dependencies installed via requirements.txt
-
-Application runs using uvicorn
-
-No secrets are included in the image
-
-Kubernetes (Minikube)
-Resources Used
-
-Deployment – Runs the FastAPI application
-
-Service – Exposes the API
-
-Secret – Injects environment variables securely
-
-MongoDB is not deployed inside the Kubernetes cluster in this setup.
-When the database is unavailable, the API returns a controlled error response instead of crashing.
-
-Secrets Management
-
-Secrets are intentionally not committed to the repository.
-
-Real credentials are provided via environment variables or Kubernetes Secrets
-
-A sample file k8s-secret.example.yaml is included to demonstrate the expected structure
