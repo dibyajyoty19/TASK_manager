@@ -1,54 +1,68 @@
-Task Management API (FastAPI · Docker · Kubernetes)
-Overview
+# Task Management API  
+FastAPI · Docker · Kubernetes (Minikube)
 
-This project is a Task Management REST API built using FastAPI.
-It demonstrates my understanding of backend development, clean code structure, containerization using Docker, and basic Kubernetes deployment using Minikube.
+## Overview
+This repository contains a **Task Management REST API** built using **FastAPI**.  
+The project demonstrates backend API design, clean code structure, external SDK integration, and containerized deployment using Docker and Kubernetes.
 
-The focus of this assignment is on learning, system design, and explanation, not on building a fully production-ready system.
+The focus of this project is on **clarity, correctness, and system understanding**, rather than on adding unnecessary complexity.
 
-Features
+---
 
-CRUD APIs for managing tasks
+## Tech Stack
+- **Backend:** FastAPI (Python 3.10+)
+- **Database:** MongoDB (local / Docker)
+- **External SDK:** GitHub SDK (PyGithub)
+- **Containerization:** Docker
+- **Orchestration:** Kubernetes (Minikube)
 
-Clean object-oriented Python design
+---
 
-Repository pattern for data access
+## Features
+- Create, read, update, and delete tasks
+- Clear separation between API layer, business logic, and data access
+- Repository pattern for database interactions
+- GitHub SDK integration for external task references
+- Dockerized application
+- Kubernetes deployment using Deployment, Service, and Secrets
+- Graceful handling of missing or unavailable dependencies
 
-MongoDB integration (local / Docker environment)
+---
 
-External SDK integration using GitHub (PyGithub)
+## Project Structure
 
-Dockerized application
+task-manager/
+│
+├── main.py # FastAPI application entry point
+├── models/ # Pydantic models
+├── repository/ # Database access layer
+├── services/ # External SDK integrations
+├── database/ # MongoDB connection setup
+│
+├── Dockerfile # Docker configuration
+├── requirements.txt # Python dependencies
+│
+├── k8s-deployment.yaml # Kubernetes Deployment
+├── k8s-service.yaml # Kubernetes Service
+├── k8s-secret.example.yaml # Example Kubernetes Secret
+│
+└── README.md
 
-Kubernetes deployment using Minikube
 
-Secrets management using environment variables and Kubernetes Secrets
+---
 
-Graceful handling of missing dependencies
+## API Endpoints
 
-Tech Stack
+### Tasks
+- `POST /tasks` – Create a task  
+- `GET /tasks` – List all tasks  
+- `GET /tasks/{task_id}` – Get task details  
+- `PUT /tasks/{task_id}` – Update a task  
+- `DELETE /tasks/{task_id}` – Delete a task  
+- `POST /tasks/{task_id}/complete` – Mark task as completed  
 
-Language: Python 3.10
-
-Framework: FastAPI
-
-Database: MongoDB (local / Docker)
-
-External SDK: GitHub SDK (PyGithub)
-
-Containerization: Docker
-
-Orchestration: Kubernetes (Minikube)
-
-API Endpoints
-Method	Endpoint	Description
-POST	/tasks	Create a new task
-GET	/tasks	Get all tasks
-GET	/tasks/{id}	Get task by ID
-PUT	/tasks/{id}	Update a task
-DELETE	/tasks/{id}	Delete a task
-POST	/tasks/{id}/complete	Mark task as completed
-Task Model
+### Task Model
+```json
 {
   "id": "string",
   "title": "string",
@@ -56,121 +70,68 @@ Task Model
   "status": "pending | in_progress | completed",
   "priority": "low | medium | high",
   "created_at": "timestamp",
-  "external_reference_id": "string | null"
+  "external_reference_id": "string"
 }
 
-Project Structure
-task-manager/
-│
-├── main.py                  # FastAPI routes
-├── models/                  # Pydantic models
-├── repository/              # Database access layer
-├── services/                # External SDK services
-├── database/                # MongoDB connection logic
-├── Dockerfile
-├── requirements.txt
-├── k8s-deployment.yaml
-├── k8s-service.yaml
-├── k8s-secret.yaml
-└── README.md
+Design Notes
+Code Structure
 
-Design Principles Used
+API routes contain no direct database logic
 
-No database logic inside API routes
+All persistence operations are handled through a repository layer
 
-Clear separation of responsibilities
+External integrations are isolated in service classes
 
-External services isolated from core logic
+This keeps the codebase modular and easier to reason about
 
-Environment-based configuration
+Database
 
-Defensive programming to avoid crashes
+MongoDB is used as a NoSQL datastore
 
-External SDK Integration (GitHub)
+Accessed using a dedicated data access layer
 
-Integrated PyGithub SDK
+Schema is flexible and suitable for task-based data
 
-When a task is created, the API attempts to create a GitHub Issue
+External SDK Integration
 
-The GitHub Issue ID is stored as external_reference_id
+GitHub is integrated using PyGithub
 
-If the GitHub API fails, task creation still succeeds
+A GitHub Issue can be created when a task is created
 
-This demonstrates:
+The issue identifier is stored in external_reference_id
 
-SDK usage
+If GitHub is unavailable, the API continues to function without failing
 
-Token-based authentication
+Docker
 
-Graceful failure handling
+The application is fully containerized using Docker.
 
-Docker Usage
-Build Image
-docker build -t task-manager-api .
+Highlights
 
-Run Container
-docker run -p 8000:8000 --env-file .env task-manager-api
+Python 3.10 base image
 
+Dependencies installed via requirements.txt
 
-Swagger UI:
+Application runs using uvicorn
 
-http://127.0.0.1:8000/docs
+No secrets are included in the image
 
-Kubernetes Deployment (Minikube)
-Kubernetes Resources Used
+Kubernetes (Minikube)
+Resources Used
 
-Deployment
+Deployment – Runs the FastAPI application
 
-Service (NodePort)
+Service – Exposes the API
 
-Secret
+Secret – Injects environment variables securely
 
-Important Note About Database in Kubernetes
+MongoDB is not deployed inside the Kubernetes cluster in this setup.
+When the database is unavailable, the API returns a controlled error response instead of crashing.
 
-For Kubernetes deployment, the focus was on deploying the API service itself.
+Secrets Management
 
-MongoDB was intentionally not deployed inside Kubernetes to keep the setup within an intern-level scope.
+Secrets are intentionally not committed to the repository.
 
-When running in Kubernetes without MongoDB:
+Real credentials are provided via environment variables or Kubernetes Secrets
 
-GET /tasks returns an empty list
-
-POST /tasks returns 503 Database not configured
-
-The API does not crash and handles missing dependencies gracefully
-
-In a production environment, MongoDB would typically be:
-
-A managed cloud database, or
-
-A StatefulSet with persistent storage
-
-Running on Kubernetes
-minikube start
-minikube image load task-manager-api
-kubectl apply -f k8s-secret.yaml
-kubectl apply -f k8s-deployment.yaml
-kubectl apply -f k8s-service.yaml
-minikube service task-manager-service
-
-What I Learned
-
-Designing clean REST APIs using FastAPI
-
-Structuring backend projects using OOP principles
-
-Using real external SDKs
-
-Containerizing applications using Docker
-
-Deploying services using Kubernetes
-
-Managing secrets securely
-
-Handling system dependencies gracefully
-
-Understanding real-world tradeoffs in system design
-
-Conclusion
-
-This project demonstrates my ability to quickly learn new tools, read documentation, and build cloud-ready backend services while keeping the solution clean, understandable, and within scope.
+A sample file k8s-secret.example.yaml is included to demonstrate the expected structure
