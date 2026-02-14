@@ -150,12 +150,3 @@ Swagger UI will be available at:
 http://127.0.0.1:8000/docs
 ```
 ---
-### Walkthrough
-- A short video walkthrough accompanies this repository, covering:
-- Architecture and code organization
-- API behavior
-- Docker setup
-- Kubernetes deployment and runtime behavior
-- Design decisions and trade-offs
-
----
