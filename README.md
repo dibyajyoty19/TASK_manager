@@ -74,32 +74,41 @@ task-manager/
 ---
 ## Design Notes
 ---
-### Code Structure
--API routes contain no direct database logic
--All persistence operations are handled through a repository layer
--External integrations are isolated in service classes
--This keeps the codebase modular and easier to maintain
+## Code Structure
+- API routes contain no direct database logic
+- All persistence operations are handled through a repository layer
+- External integrations are isolated in service classes
+- This keeps the codebase modular and easier to maintain
+  
 ---
-### Database
+
+## Database
 -MongoDB is used as a NoSQL datastore
 -Accessed via a dedicated data access layer
 -Suitable for flexible task-based data
+
 ---
+
 ### External SDK Integration
 -GitHub is integrated using PyGithub
 -A GitHub Issue can be created when a task is created
 -The issue identifier is stored as external_reference_id
 -If GitHub is unavailable, task creation still succeeds
+
 ---
+
 ### Docker
 -The application is containerized using Docker.
+
 ---
 ### Highlights
 -Python 3.10 base image
 -Dependencies installed via requirements.txt
 -Application runs using uvicorn
 -No secrets are included in the image
+
 ---
+
 ### Kubernetes (Minikube)
 Resources Used
 -Deployment – Runs the FastAPI application
@@ -107,12 +116,16 @@ Resources Used
 -Secret – Injects environment variables securely
 MongoDB is not deployed inside the Kubernetes cluster in this setup.
 When the database is unavailable, the API responds with a controlled error instead of crashing.
+
 ---
+
 ### Secrets Management
 -Secrets are intentionally not committed to the repository.
 -Real credentials are provided via environment variables or Kubernetes Secrets
 -A sample file k8s-secret.example.yaml is included to demonstrate the expected structure
+
 ---
+
 ### Running Locally
 Create and activate virtual environment
 
@@ -142,4 +155,5 @@ http://127.0.0.1:8000/docs
 -Docker setup
 -Kubernetes deployment and runtime behavior
 -Design decisions and trade-offs
+
 ---
