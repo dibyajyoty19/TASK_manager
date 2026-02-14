@@ -73,7 +73,7 @@ task-manager/
 ```
 ---
 ## Design Notes
-
+---
 ### Code Structure
 -API routes contain no direct database logic
 -All persistence operations are handled through a repository layer
