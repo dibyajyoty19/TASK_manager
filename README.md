@@ -149,21 +149,6 @@ Swagger UI will be available at:
 ```bash
 http://127.0.0.1:8000/docs
 ```
-## ⚠️ Gemini API Quota & Billing Note
-
-This project integrates the Google Gemini API as the LLM backend.
-
-At the time of submission, Gemini free-tier access for text generation models
-has a **zero request quota** unless billing is enabled. As a result, live API
-calls may fail with a `429 ResourceExhausted` error during evaluation.
-
-To ensure the application remains **fully testable and reviewable**, a
-**fallback demo mode** is implemented. When the LLM API is unavailable due to
-quota or billing restrictions, the system automatically loads a mock AI
-response that demonstrates:
-
-- Structured contract analysis
-- Risk flag detection with severity
 - Plain-English summaries
 - End-to-end UI functionality
 
